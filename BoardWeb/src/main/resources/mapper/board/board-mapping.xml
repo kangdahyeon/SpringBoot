@@ -106,6 +106,7 @@
 	</delete>
 	
 	<delete id="deleteFileList" parameterType="int">
-		DELETE FROM BOARD_FILE WHERE SEQ = #{seq}
+		DELETE FROM BOARD_FILE
+			WHERE SEQ = #{seq}
 	</delete>
 </mapper>

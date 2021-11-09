@@ -9,7 +9,8 @@ import com.springbook.vo.BoardVO;
 
 @Mapper
 public interface BoardMapper {
-	
+	//CRUD 기능의 메소드 구현
+	//글 등록
 	void insertBoard(BoardVO vo);
 	
 	//글 수정
@@ -28,7 +29,7 @@ public interface BoardMapper {
 	int getBoardSeq();
 	
 	//디비에 파일 리스트 등록
-	void insertBoardFileList(List<BoardFileVO> fileList);
+	void insertBoardFileList(BoardFileVO vo);
 	
 	//파일목록 리턴
 	List<BoardFileVO> getBoardFileList(int seq);

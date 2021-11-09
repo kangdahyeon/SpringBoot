@@ -13,7 +13,7 @@
 		<h1>로그인</h1>
 		<hr>
 		<!-- login_proc.jsp : 컨트롤러에 해당 jsp 파일. 로그인 기능처리 -->
-		<form action="login.do" method="post">
+		<form action="loginSuccess.do" method="post">
 			<table border="1" cellpadding="0" cellspacing="0">
 				<tr>
 					<td bgcolor="orange">아이디</td>

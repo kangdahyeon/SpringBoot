@@ -51,10 +51,13 @@ public class BoardServiceImpl implements BoardService{
 	}
 	
 	public void insertBoardFileList(List<BoardFileVO> fileList) {
-		boardMapper.insertBoardFileList(fileList);
+		for(BoardFileVO vo : fileList) {
+			boardMapper.insertBoardFileList(vo);
+		}
 	}
 	
 	public List<BoardFileVO> getBoardFileList(int seq) {
+		List<BoardFileVO> fileList = boardMapper.getBoardFileList(seq);
 		return boardMapper.getBoardFileList(seq);
 	}
 	

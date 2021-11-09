@@ -1,0 +1,10 @@
+package com.springbook.vo;
+
+public class BoardFileVO {
+	private int seq;
+	private int fSeq;
+	private String originalFileName;
+	private String filePath;
+	private long fileSize;
+	
+}

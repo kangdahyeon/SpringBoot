@@ -31,7 +31,6 @@ import com.springbook.service.BoardService;
 import com.springbook.vo.BoardFileVO;
 import com.springbook.vo.BoardVO;
 
-
 @Controller
 //board로 model 저장된 객체가 있으면 HttpSession 데이터 보관소에서 동일한 키 값(board)로 저장
 @SessionAttributes("board")
@@ -111,19 +110,22 @@ public class BoardController {
 		
 		boardService.deleteBoard(vo);
 		boardService.deleteFileList(vo.getSeq());
-		
 		return "redirect:getBoardList.do";
 	}
 	
 	@RequestMapping(value="/getBoard.do")
 	public String getBoard(BoardVO vo, Model model) {
 		System.out.println("글 상세 조회 처리");
-		
+		System.out.println("vo.getSeq()===================>" + vo.getSeq());
 		//Model 객체는 RequestServlet 데이터 보관소에 저장
 		//RequestServlet 데이터 보관소에 저장하는 것과 동일하게 동작
 		//request.setAttribute("board", boardDAO.getBoard(vo)) == model.addAttribute("board", boardDAO.getBoard(vo))
 		model.addAttribute("board", boardService.getBoard(vo));
-		model.addAttribute("fileList", boardService.getBoardFileList(vo.getSeq()));		
+		model.addAttribute("fileList", boardService.getBoardFileList(vo.getSeq()));
+		List<BoardFileVO> fileList = boardService.getBoardFileList(vo.getSeq());
+		for(int i = 0; i < fileList.size(); i++) {
+			System.out.println(fileList.get(i).toString());
+		}
 		return "getBoard";
 	}
 	
@@ -162,23 +164,26 @@ public class BoardController {
 	
 	@RequestMapping(value="/fileDown.do")
 	@ResponseBody
-	public ResponseEntity<Resource> fileDown(@RequestParam("fileName")String fileName, HttpServletRequest request) throws Exception {
-		// 업로드 파일 경로 
+	public ResponseEntity<Resource> fileDown(@RequestParam("fileName") String fileName, 
+				HttpServletRequest request) throws Exception {
+		//업로드 파일 경로
 		String path = request.getSession().getServletContext().getRealPath("/") + "/upload/";
 		
-		// 파일 경로, 파일명으로 리소스 객체 생성
+		System.out.println(path);
+		
+		//파일경로, 파일명으로 리소스 객체 생성
 		Resource resource = new FileSystemResource(path + fileName);
 		
-		// 리소스에 있는 파일명 꺼내옴.
+		//파일 명
 		String resourceName = resource.getFilename();
 		
-		// HttpHeaders에 옵션에 추가하기 위해서 헤더 변수 선언
+		//Http헤더에 옵션을 추가하기 위해서 헤더 변수 선언
 		HttpHeaders headers = new HttpHeaders();
 		
 		try {
-			// 헤더에 파일명으로 첨부파일 하나 추가
-			headers.add("Context-Disposition", "attachment; filename=" + new String(resourceName.getBytes("UTF-8"),
-					"ISO-8859-1"));
+			//헤더에 파일명으로 첨부파일 추가
+			headers.add("Content-Disposition", "attachment; filename=" + new String(resourceName.getBytes("UTF-8"),
+						"ISO-8859-1"));
 		} catch(UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

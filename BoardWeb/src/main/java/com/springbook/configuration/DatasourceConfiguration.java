@@ -19,8 +19,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @PropertySource("classpath:/application.properties")
 public class DatasourceConfiguration {
 	@Autowired
-	private ApplicationContext appllicationContext;
-	
+	private ApplicationContext applicationContext;
 	
 	@Bean
 	@ConfigurationProperties(prefix="spring.datasource.hikari")
@@ -31,16 +30,18 @@ public class DatasourceConfiguration {
 	@Bean
 	public DataSource dataSource() throws Exception {
 		DataSource dataSource = new HikariDataSource(hikariConfig());
-		
 		return dataSource;
 	}
+	
 	@Bean
 	public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 		sqlSessionFactoryBean.setDataSource(dataSource);
-		sqlSessionFactoryBean.setMapperLocations(appllicationContext
-												.getResources("classpath:/mapper/**/*-mapping.xml"));
+		//Mybatis 설정파일 위치 지정
+		sqlSessionFactoryBean.setConfigLocation(applicationContext.getResource("classpath:mybatis-config.xml"));
 		
+		sqlSessionFactoryBean.setMapperLocations(applicationContext
+									.getResources("classpath:/mapper/**/*-mapping.xml"));
 		return sqlSessionFactoryBean.getObject();
 	}
 	

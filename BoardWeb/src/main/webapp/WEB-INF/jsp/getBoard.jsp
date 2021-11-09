@@ -41,8 +41,11 @@
 					<td bgcolor="orange">첨부파일 목록</td>
 					<td>
 						<c:forEach var="file" items="${fileList }">
-							<a class="downlink" id="${file.fSeq }" href="${file.originalFileName }">${file.originalFileName }</a>
-							<button type="button" onclick="deleteFile('${file.fSeq }');">삭제</button>
+							<script>
+								console.log("${file}");
+							</script>
+							<a class="downlink" id="${file.FSeq }" href="${file.originalFileName }">${file.originalFileName }</a>
+							<button type="button" onclick="deleteFile('${file.FSeq }');">삭제</button>
 							<br>
 						</c:forEach>
 					</td>
@@ -61,7 +64,7 @@
 			</table>
 		</form>
 		<hr>
-		<a href="insertBoard.do">글 등록</a>&nbsp;&nbsp;&nbsp;
+		<a href="insertBoard.jsp">글 등록</a>&nbsp;&nbsp;&nbsp;
 		<a href="deleteBoard.do?seq=${board.seq }">글 삭제</a>&nbsp;&nbsp;&nbsp;
 		<a href="getBoardList.do">글 목록</a>
 	</center>
@@ -77,6 +80,7 @@
 				}
 			});
 		}
+		
 		$(document).ready(function() {
 			$(".downlink").click(function(e) {
 				e.preventDefault();

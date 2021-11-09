@@ -1,0 +1,49 @@
+package com.springbook.configuration;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+@EnableWebSecurity
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+	@Autowired
+	private UserDeatailsServiceImpl userDetailsServiceImpl;
+	
+	@Override
+	protected void configure(HttpSecurity security) throws Exception {
+		
+		// authorizeRequest : 사용자 인증과 권한 설정
+		// antMatchers : 매칭되는 url패턴에 대한 접근설정
+		// permitAll : 모든 사용자 접근 허용
+		// hasRole : 특정권한의 사용자만 접근 허용
+		// 
+		
+		security.authorizeRequest().antMatchers("/").permitAll()
+									.antMatchers("/member/**").authenticated()
+									.antMatchers("/manager/**").hasRole("ROLE_MANAGER")
+									.antMatchers("admin/**").hasAnyRole("ROLE_ADMIN");
+		
+		//로그인처리
+		security.formLogin().loginPage("/login.do").defaultSuccessUrl("/loginSuccess.do", true);
+		
+		security.logout().invalidateHttpSession(true).logoutSuccessUrl("/login.do");
+		
+		security.userDetailsService(userDetailsServiceImpl);
+	}
+	
+	@Autowired
+	public void authenticate(AuthenticationManagerBuilder auth) throws Exception {
+		
+	}
+	
+	//암호화 처리 빈 객체 등록
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+	}
+}

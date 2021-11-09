@@ -1,0 +1,9 @@
+package com.springbook.vo;
+
+public class MemberVO {
+	private String id;
+	private String password;
+	private String name;
+	private String role;
+	private String enalbed;
+}	

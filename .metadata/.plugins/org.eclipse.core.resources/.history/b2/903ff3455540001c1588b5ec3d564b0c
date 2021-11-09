@@ -1,0 +1,5 @@
+package com.springbook.vo;
+
+public class MemberVO {
+
+}
